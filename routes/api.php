@@ -31,6 +31,7 @@ Route::middleware(['auth:api'])->group(function () {
          * These routes handle User management operations.
          */
         Route::apiResource('Users', UserController::class);
+        Route::get('Users/assigned-tasks', [UserController::class, 'getUsersWithAssignedTasks']);
         Route::get('Users/trashed', [UserController::class, 'trashed']);
         Route::post('Users/{id}/restore', [UserController::class, 'restore']);
         Route::delete('Users/{id}/forceDelete', [UserController::class, 'forceDelete']);

@@ -18,6 +18,15 @@ class ProjectResource extends JsonResource
             'id'                  => $this->id,
             'name'                => $this->name,
             'description'         => $this->description,
+            'role'                => $this->whenPivotLoaded('project_user', function () {
+                return $this->pivot->role;
+            }),
+            'contribution_hours'  => $this->whenPivotLoaded('project_user', function () {
+                return $this->pivot->contribution_hours;
+            }),
+            'last_activity'       => $this->whenPivotLoaded('project_user', function () {
+                return $this->pivot->last_activity;
+            }),
             'users'               => UserResource::collection($this->whenLoaded('users')),
             'tasks'               => TaskResource::collection($this->whenLoaded('tasks')),
             'latestTask'          => new TaskResource($this->whenLoaded('latestTask')),

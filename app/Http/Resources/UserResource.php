@@ -15,13 +15,22 @@ class UserResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'            => $this->id,
-            'name'          => $this->name,
-            'email'         => $this->email,
-            'projects'      => ProjectResource::collection($this->whenLoaded('projects')),
-            'tasks'         => TaskResource::collection($this->whenLoaded('tasks')),
-            'createdTasks'  => TaskResource::collection($this->whenLoaded('createdTasks')),
-            'assignedTasks' => TaskResource::collection($this->whenLoaded('assignedTasks')),
+            'id'                  => $this->id,
+            'name'                => $this->name,
+            'email'               => $this->email,
+            'role'                => $this->whenPivotLoaded('project_user', function () {
+                return $this->pivot->role;
+            }),
+            'contribution_hours'  => $this->whenPivotLoaded('project_user', function () {
+                return $this->pivot->contribution_hours;
+            }),
+            'last_activity'       => $this->whenPivotLoaded('project_user', function () {
+                return $this->pivot->last_activity;
+            }),
+            'projects'            => ProjectResource::collection($this->whenLoaded('projects')),
+            'tasks'               => TaskResource::collection($this->whenLoaded('tasks')),
+            'createdTasks'        => TaskResource::collection($this->whenLoaded('createdTasks')),
+            'assignedTasks'       => TaskResource::collection($this->whenLoaded('assignedTasks')),
         ];
     }
 }

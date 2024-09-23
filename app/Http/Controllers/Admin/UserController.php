@@ -36,7 +36,14 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $perPage = $request->input('per_page', 10); // Default to 10 if not provided
-        $Users = $this->UserService->listUser($perPage, $request->input('status'), $request->input('priority'));
+        $Users = $this->UserService->listUser($perPage);
+        return $this->resourcePaginated(UserResource::collection($Users));
+    }
+
+    public function getUsersWithAssignedTasks(Request $request)
+    {
+        $perPage = $request->input('per_page', 10); // Default to 10 if not provided
+        $Users = $this->UserService->getUsersWithAssignedTasks($perPage, $request->input('status'), $request->input('priority'));
         return $this->resourcePaginated(UserResource::collection($Users));
     }
 

@@ -17,7 +17,17 @@ class UserService
     /**
      * list all Users information
      */
-    public function listUser(int $perPage, $status, $priority)
+    public function listUser(int $perPage)
+    {
+        try {
+            return User::paginate($perPage);
+        } catch (Exception $e) {
+            Log::error('Error Listing User ' . $e->getMessage());
+            throw new HttpResponseException($this->errorResponse(null, 'there is something wrong in server', 500));
+        }
+    }
+
+    public function getUsersWithAssignedTasks(int $perPage, $status, $priority)
     {
         try {
             return User::with('assignedTasks')->filterTasks($status, $priority)->paginate($perPage);
